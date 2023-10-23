@@ -15,7 +15,7 @@ namespace PowerApp.Function
         }
         public float GetY(float valueX)
         {
-            return ValueK * (float)Math.Pow(ValueA, 2);
+            return ValueK * (float)Math.Pow(valueX, ValueA);
         }
     }
 }

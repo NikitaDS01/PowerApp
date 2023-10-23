@@ -32,7 +32,11 @@ namespace PowerApplication.Page
         {
             StackLayout stack = new StackLayout();
 
-            SKCanvasView canvasView = new SKCanvasView();
+            SKCanvasView canvasView = new SKCanvasView()
+            {
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.Fill
+            };
             canvasView.PaintSurface += OnCanvasViewPaintSurface;
             
 
@@ -51,8 +55,23 @@ namespace PowerApplication.Page
             SKCanvas canvas = surface.Canvas;
 
             canvas.Clear();
-            //SKPoint center = new SKPoint(info.Width / 2, info.Height / 2);
+            var center = new SKPoint(info.Width / 2, info.Height / 2);
 
+            var plane = new Plane(center);
+
+            for(int x = 0; x < info.Width; x++)
+            {
+                var point = new SKPoint(x, _data.GetY(x));
+                plane.AddPoint(point);
+            }
+
+            var paint = new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = SKColors.Green,
+                StrokeWidth = 5
+            };
+            canvas.DrawPath(plane.GetPath(), paint);
         }
     }
 }

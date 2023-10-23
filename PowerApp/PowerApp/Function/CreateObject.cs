@@ -32,7 +32,17 @@ namespace PowerApplication.Function
             {
                 Label = text,
                 Keyboard = Keyboard.Numeric,
-                Placeholder = "Введите число"
+                Placeholder = "Введите число",
+            };
+        }
+        public static EntryCell EntryCellNumeric(string text, int value)
+        {
+            return new EntryCell
+            {
+                Label = text,
+                Keyboard = Keyboard.Numeric,
+                Placeholder = "Введите число",
+                Text = value.ToString()
             };
         }
         public static Button Button(string text)

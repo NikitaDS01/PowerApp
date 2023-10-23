@@ -19,7 +19,7 @@ namespace PowerApplication.Page
         private void Init()
         {
             StackLayout stack = new StackLayout();
-            _parameterK = CreateObject.EntryCellNumeric("Перем. k");
+            _parameterK = CreateObject.EntryCellNumeric("Перем. k", 1);
             _parameterA = CreateObject.EntryCellNumeric("Перем. a");
 
             var table = new TableView
@@ -29,8 +29,8 @@ namespace PowerApplication.Page
                 {
                     new TableSection("Данные")
                     {
-                        _parameterK,
-                        _parameterA
+                        _parameterA,
+                        _parameterK
                     }
                 }
             };
@@ -50,13 +50,14 @@ namespace PowerApplication.Page
 
         private async void OnButtonClicked(object sender, EventArgs e)
         {
-            float valueA = 0;
-            if (!string.IsNullOrEmpty(_parameterA.Text))
-                valueA = Convert.ToSingle(_parameterA.Text);
+            if (string.IsNullOrEmpty(_parameterA.Text))
+            {
+                DisplayAlert("Предупреждение", "Вы не ввели параметр а", "Ок");
+                return;
+            }
 
-            float valueK = 0;
-            if (!string.IsNullOrEmpty(_parameterK.Text))
-                valueK = Convert.ToSingle(_parameterK.Text);
+            float valueA = Convert.ToSingle(_parameterA.Text);
+            float valueK = Convert.ToSingle(_parameterK.Text);
 
             var function = new PowerFunctionData(valueA, valueK);
             await Navigation.PushAsync(new GraphPage(function));
