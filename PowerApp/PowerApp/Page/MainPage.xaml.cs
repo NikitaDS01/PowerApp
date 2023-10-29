@@ -9,6 +9,7 @@ namespace PowerApplication.Page
     {
         private EntryCell _parameterA;
         private EntryCell _parameterK;
+        private EntryCell _parameterScale;
 
         public MainPage()
         {
@@ -20,7 +21,8 @@ namespace PowerApplication.Page
         {
             StackLayout stack = new StackLayout();
             _parameterK = CreateObject.EntryCellNumeric("Перем. k", 1);
-            _parameterA = CreateObject.EntryCellNumeric("Перем. a");
+            _parameterA = CreateObject.EntryCellNumeric("Перем. a", 2);
+            _parameterScale = CreateObject.EntryCellNumeric("Масштаб", 10);
 
             var table = new TableView
             {
@@ -30,7 +32,8 @@ namespace PowerApplication.Page
                     new TableSection("Данные")
                     {
                         _parameterA,
-                        _parameterK
+                        _parameterK,
+                        _parameterScale
                     }
                 }
             };
@@ -52,14 +55,25 @@ namespace PowerApplication.Page
         {
             if (string.IsNullOrEmpty(_parameterA.Text))
             {
-                DisplayAlert("Предупреждение", "Вы не ввели параметр а", "Ок");
+                DisplayAlert("Предупреждение", "Вы не ввели параметр A", "Ок");
+                return;
+            }
+            if (string.IsNullOrEmpty(_parameterK.Text))
+            {
+                DisplayAlert("Предупреждение", "Вы не ввели параметр K", "Ок");
+                return;
+            }
+            if (string.IsNullOrEmpty(_parameterScale.Text))
+            {
+                DisplayAlert("Предупреждение", "Вы не ввели масштаб", "Ок");
                 return;
             }
 
             float valueA = Convert.ToSingle(_parameterA.Text);
             float valueK = Convert.ToSingle(_parameterK.Text);
+            int scale = (int)Convert.ToSingle(_parameterScale.Text);
 
-            var function = new PowerFunctionData(valueA, valueK);
+            var function = new PowerFunctionData(valueA, valueK, scale);
             await Navigation.PushAsync(new GraphPage(function));
         }
 

@@ -14,12 +14,6 @@ namespace PowerApplication.Page
     public class GraphPage : ContentPage
     {
         private PowerFunctionData _data;
-        public GraphPage()
-        {
-            _data = new PowerFunctionData(0, 0);
-            Title = "Вывод графика";
-            Init();
-        }
         public GraphPage(PowerFunctionData data)
         {
             _data = data;
@@ -37,7 +31,7 @@ namespace PowerApplication.Page
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 HorizontalOptions = LayoutOptions.Fill
             };
-            canvasView.PaintSurface += OnCanvasViewPaintSurface;
+            canvasView.PaintSurface += OnCanvasDrawGraph;
             
 
             var lbl = CreateObject.Label($"Формула y = {_data.ValueK} * x^{_data.ValueA}");
@@ -47,31 +41,58 @@ namespace PowerApplication.Page
             stack.Children.Add(canvasView);
             Content = stack;
         }
+        private void DrawCoordinatePlane(SKCanvas canvas, SKImageInfo info)
+        {
+            var paintLine = new SKPaint
+            {
+                Style = SKPaintStyle.Stroke,
+                Color = SKColors.Black,
+                StrokeWidth = 5
+            };
+            var paintText = new SKPaint
+            {
+                Color = SKColors.Black,
+                IsAntialias = true,
+                TextSize = 18
+            };
 
-        private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
+            canvas.DrawLine(
+                new SKPoint(0, info.Height / 2),
+                new SKPoint(info.Width, info.Height / 2),
+                paintLine
+                );
+            canvas.DrawLine(
+                new SKPoint(info.Width / 2, 0),
+                new SKPoint(info.Width / 2, info.Height),
+                paintLine
+                );
+        }
+        private void OnCanvasDrawGraph(object sender, SKPaintSurfaceEventArgs args)
         {
             SKImageInfo info = args.Info;
             SKSurface surface = args.Surface;
             SKCanvas canvas = surface.Canvas;
 
             canvas.Clear();
-            var center = new SKPoint(info.Width / 2, info.Height / 2);
 
-            var plane = new Plane(center);
-
-            for(int x = 0; x < info.Width; x++)
+            var plane = new CoordinatePlane(_data.Scale);
+            for(int x = plane.MinSteps; x < plane.MaxSteps; x++)
             {
-                var point = new SKPoint(x, _data.GetY(x));
-                plane.AddPoint(point);
+                //float y = _data.GetY(x);
+                double y = _data.GetY((float)x);
+                SKPoint point = plane.CreatePoint(x, (float)y);
+                plane.AddPoint(plane.NormalizationPoint(point, info));
             }
 
-            var paint = new SKPaint
+            var paintPath = new SKPaint
             {
                 Style = SKPaintStyle.Stroke,
                 Color = SKColors.Green,
-                StrokeWidth = 5
+                StrokeWidth = 7
             };
-            canvas.DrawPath(plane.GetPath(), paint);
+
+            this.DrawCoordinatePlane(canvas, info);
+            canvas.DrawPath(plane.GetPath(), paintPath);
         }
     }
 }
