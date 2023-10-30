@@ -38,9 +38,6 @@ namespace PowerApp.Function
 
         public void AddPoint(SKPoint point)
         {
-            if (point.Y <= float.MinValue)
-                return;
-
             if (_path.Points.Length == 0)
                 _path.MoveTo(point);
             else
