@@ -75,19 +75,15 @@ namespace PowerApplication.Page
 
             canvas.Clear();
 
-            var plane = new CoordinatePlane(_data.Scale);
-            for(int x = plane.MinSteps; x < plane.MaxSteps; x++)
+            var plane = new CoordinatePlane(_data.Scale, info.Width);
+            for(float x = plane.MinSteps; x < plane.MaxSteps; x+=plane.Step)
             {
-                float? y;
-                if (IsFloat(_data.ValueA))
-                    y = (float?)_data.GetYFloat(x);
-                else
-                    y = (float?)_data.GetYInt(x);
+                ValueY y = _data.GetY(x);
 
-                if (y == null || y == float.PositiveInfinity)
+                if (y.IsEmpty)
                     continue;
 
-                SKPoint point = plane.CreatePoint(x, (float)y);
+                SKPoint point = plane.CreatePoint(x, y.Value);
                 plane.AddPoint(plane.NormalizationPoint(point, info));
             }
 
@@ -98,14 +94,8 @@ namespace PowerApplication.Page
                 StrokeWidth = 7
             };
 
-            this.DrawCoordinatePlane(canvas, info);
             canvas.DrawPath(plane.GetPath(), paintPath);
-        }
-        private bool IsFloat(float value)
-        {
-            int whole = (int)Math.Floor(Math.Abs(value));
-            float fractional = Math.Abs(value) - whole;
-            return fractional > 0 && fractional < 1;
+            this.DrawCoordinatePlane(canvas, info);
         }
     }
 }

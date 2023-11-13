@@ -7,26 +7,29 @@ namespace PowerApp.Function
     public class PowerFunctionData
     {
         public float ValueA { get; set; }
-        public float ValueB { get; set; }
         public float ValueK { get; set; }
         public int Scale { get;set; }
-        public PowerFunctionData(float valueA, float valueB, float valueK, int scale)
+        public PowerFunctionData(float valueA, float valueK, int scale)
         {
             ValueA = valueA;
-            ValueB = valueB;
             ValueK = valueK;
             Scale = scale;
         }
-        public double? GetYFloat(float valueX)
+        public ValueY GetY(float valueX)
         {
-            if (valueX < 0)
-                return null;
-            double newX = Math.Exp(ValueA * Math.Log(valueX, Math.E));
-            return (ValueK * newX) + ValueB;
+            if (IsFloat(ValueA) && valueX <= 0)
+                return new ValueY(-1, true);
+            if(ValueA < 0 && valueX == 0)
+                return new ValueY(-1, true);
+            return new ValueY(
+                (float)(ValueK * Math.Pow(valueX, ValueA))
+                );
         }
-        public double GetYInt(int valueX)
+        private bool IsFloat(float value)
         {
-            return (ValueK * Math.Pow(valueX, ValueA)) + ValueB;
+            int whole = (int)Math.Floor(Math.Abs(value));
+            float fractional = Math.Abs(value) - whole;
+            return fractional > 0 && fractional < 1;
         }
     }
 }

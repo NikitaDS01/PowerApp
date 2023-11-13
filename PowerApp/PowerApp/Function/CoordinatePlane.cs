@@ -7,6 +7,8 @@ namespace PowerApp.Function
 {
     public class CoordinatePlane
     {
+        private const float COUNT_STEP = 1000;
+
         private SKPath _path;
         private int _steps;
         private int _scale;
@@ -16,8 +18,9 @@ namespace PowerApp.Function
             _steps = steps;
             _scale = scale;
         }
-        public int MinSteps => -_steps / 2;
-        public int MaxSteps => _steps / 2;
+        public int MinSteps => -(_steps / _scale) / 2;
+        public int MaxSteps => (_steps / _scale) / 2;
+        public float Step => (_steps / _scale) / COUNT_STEP;
         public SKPoint NormalizationPoint(SKPoint point, SKPoint centerWindow)
         {
             return new SKPoint(
