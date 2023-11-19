@@ -18,9 +18,9 @@ namespace PowerApp.Function
             _steps = steps;
             _scale = scale;
         }
-        public int MinSteps => -(_steps / _scale) / 2;
-        public int MaxSteps => (_steps / _scale) / 2;
-        public float Step => (_steps / _scale) / COUNT_STEP;
+        public float MinSteps => -(_steps / 2f) / _scale;
+        public float MaxSteps => (_steps / 2f) / _scale;
+        public float Step => (_steps / COUNT_STEP) / _scale;
         public SKPoint NormalizationPoint(SKPoint point, SKPoint centerWindow)
         {
             return new SKPoint(

@@ -7,6 +7,7 @@ namespace PowerApplication.Page
 {
     public partial class MainPage : ContentPage
     {
+        private const int MAX_SCALE = 10000;
         private EntryCell _parameterA;
         private EntryCell _parameterK;
         private EntryCell _parameterScale;
@@ -76,6 +77,11 @@ namespace PowerApplication.Page
             if(scale <= 0 )
             {
                 DisplayAlert("Предупреждение", "Масштаб меньше единицы", "Ок");
+                return;
+            }
+            if (scale > MAX_SCALE)
+            {
+                DisplayAlert("Предупреждение", "Масштаб больше допустимого", "Ок");
                 return;
             }
             var function = new PowerFunctionData(valueA, valueK, scale);
