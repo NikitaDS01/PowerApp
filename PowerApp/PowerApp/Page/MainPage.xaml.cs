@@ -23,7 +23,7 @@ namespace PowerApplication.Page
             StackLayout stack = new StackLayout();
             _parameterK = CreateObject.EntryCellNumeric("Перем. k", 1);
             _parameterA = CreateObject.EntryCellNumeric("Перем. a", 2);
-            _parameterScale = CreateObject.EntryCellNumeric("Масштаб", 10);
+            _parameterScale = CreateObject.EntryCellNumeric("Масштаб", 100);
 
             var table = new TableView
             {
@@ -39,7 +39,7 @@ namespace PowerApplication.Page
                 }
             };
 
-            var lbl = CreateObject.Label("Формула y = k * x^a");
+            var lbl = CreateObject.Label("y = k * x^a");
 
             var btn = CreateObject.Button("Построить график!");
             btn.Clicked += OnButtonClicked;
